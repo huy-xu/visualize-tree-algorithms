@@ -8,7 +8,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 
-public class CircleNode extends StackPane {
+public class CircleNode extends StackPane implements Comparable{
   public String value;
   private final double RADIUS = 20;
   private final Font FONT = Font.font("Cooper Black", FontWeight.BOLD, 16);
@@ -28,5 +28,13 @@ public class CircleNode extends StackPane {
     this.getChildren().addAll(cir, text);
     this.setLayoutX(centerX);
     this.setLayoutY(centerY);
+  }
+
+  @Override
+  public int compareTo(Object o) {
+    if (this.getLayoutX() == ((CircleNode) o).getLayoutX() && this.getLayoutY() == ((CircleNode) o).getLayoutY()) {
+      return 0;
+    }
+    return 1;
   }
 }

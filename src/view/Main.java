@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.AVLTree;
 import model.BST;
 
 public class Main extends Application {
@@ -16,22 +17,34 @@ public class Main extends Application {
   @Override
   public void start(Stage primaryStage) throws Exception{
 
-    BST<Integer> bst = new BST<>();
-    bst.insert(10);
-    bst.insert(16);
-    bst.insert(7);
-    bst.insert(12);
-    bst.insert(19);
-    bst.insert(2);
-    bst.insert(4);
-    bst.insert(9);
-    bst.insert(8);
+//    BST<Integer> bst = new BST<>();
+//    bst.insert(10);
+//    bst.insert(16);
+//    bst.insert(7);
+//    bst.insert(12);
+//    bst.insert(19);
+//    bst.insert(2);
+//    bst.insert(4);
+//    bst.insert(25);
 
-//    BSTPane<Integer> bstPane = new BSTPane<>(bst, 500, 250);
-//    bstPane.displayTree();
+    AVLTree<Integer> avlTree = new AVLTree<>();
+    avlTree.insert(10);
+    avlTree.insert(16);
+    avlTree.insert(7);
+    avlTree.insert(19);
+    avlTree.insert(2);
+    avlTree.insert(4);
 
-    TreeController treeController = new TreeController();
-    treeController.createTreeView(bst);
+    TreeController treeController = new TreeController(avlTree);
+
+    // Each time add a new Node use getListNodeChanged
+    avlTree.insert(25);
+    treeController.getListNodeChanged().forEach((k, v) -> {
+      System.out.println(k.element.toString());
+    });
+
+    // After animate use this to update new position for treeView
+    treeController.updateTreeView();
 
     Group root = new Group();
 
