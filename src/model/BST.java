@@ -13,8 +13,10 @@ public class BST<T extends Comparable<T>> implements Tree<T> {
   }
 
   @Override
-  public void insert(T element) {
+  public boolean insert(T element) {
     root = insert(root, element);
+    if (root == null) return false;
+    return true;
   }
 
   public Node<T> insert(Node<T> current, T element) {
@@ -31,8 +33,10 @@ public class BST<T extends Comparable<T>> implements Tree<T> {
   }
 
   @Override
-  public void delete(T element) {
+  public boolean delete(T element) {
     root = delete(root, element);
+    if (root == null) return false;
+    return true;
   }
 
   public Node<T> delete(Node<T> current, T element) {
