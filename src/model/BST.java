@@ -14,8 +14,8 @@ public class BST<T extends Comparable<T>> implements Tree<T> {
 
   @Override
   public boolean insert(T element) {
-    root = insert(root, element);
-    if (root == null) return false;
+    this.root = insert(this.root, element);
+    if (this.root == null) return false;
     return true;
   }
 
@@ -100,11 +100,25 @@ public class BST<T extends Comparable<T>> implements Tree<T> {
     traverseInOrder(root);
   }
 
-  public void traverseInOrder(Node<T> current) {
+  private void traverseInOrder(Node<T> current) {
     if (current != null) {
-      traverseInOrder(current.left);
       System.out.print(current.element.toString() + " -> ");
+      traverseInOrder(current.left);
       traverseInOrder(current.right);
+    }
+  }
+
+  public BST<T> cloneTree() {
+    BST<T> newTree = new BST<>();
+    newTree.insertInOrder(newTree, this.root);
+    return newTree;
+  }
+
+  private void insertInOrder(BST<T> tree, Node<T> current) {
+    if (current != null) {
+      tree.insert(current.element);
+      insertInOrder(tree, current.left);
+      insertInOrder(tree, current.right);
     }
   }
 }
