@@ -5,7 +5,6 @@ import model.Node;
 import view.CircleNode;
 
 import java.util.HashMap;
-import java.util.Set;
 
 public class TreeController {
   public HashMap<Node, CircleNode> treeView;
@@ -52,7 +51,7 @@ public class TreeController {
     HashMap<Node, CircleNode> list = new HashMap<>();
     HashMap<Node, CircleNode> newTreeView = createTreeView(this.tree);
 
-    for (Node key : this.treeView.keySet()) {
+    for (Node key : newTreeView.keySet()) {
       if (newTreeView.get(key).compareTo(this.treeView.get(key)) != 0) {
         list.put(key, newTreeView.get(key));
       }
