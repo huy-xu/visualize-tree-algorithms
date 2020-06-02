@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.animation.ParallelTransition;
 import javafx.scene.Group;
 import javafx.scene.shape.Line;
 import model.BST;
@@ -7,18 +8,20 @@ import model.Node;
 import model.RBTree;
 import view.CircleNode;
 import view.RBCircleNode;
+import view.SearchCircleNode;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
-public class TreeController {
+import static model.Constants.*;
+
+public class TreeController<T extends Comparable<T>> {
   public HashMap<Node, CircleNode> treeView;
   public BST tree;
 
   // For test
-  private final double CENTER_X = 500;
-  private final double CENTER_Y = 50;
-  private final double V_GAP = 50;
-  private final double H_GAP = 240;
+
 
   public TreeController(BST tree) {
     this.treeView = createTreeView(tree);
@@ -29,9 +32,9 @@ public class TreeController {
     HashMap<Node, CircleNode> treeView = new HashMap<>();
     if (tree.root != null) {
       if (tree instanceof RBTree) {
-        createRBTreeView(treeView, tree.root, this.CENTER_X, this.CENTER_Y, this.H_GAP);
+        createRBTreeView(treeView, tree.root, CENTER_X, CENTER_Y, H_GAP);
       } else {
-        createTreeView(treeView, tree.root, this.CENTER_X, this.CENTER_Y, this.H_GAP);
+        createTreeView(treeView, tree.root, CENTER_X, CENTER_Y, H_GAP);
       }
     }
     return treeView;
@@ -84,6 +87,83 @@ public class TreeController {
       // Display circleNode
       root.getChildren().add(cir);
     });
+  }
+
+  public void displayLines(Group root ){
+    this.treeView.forEach((node, cir) -> {
+      // Display two lines
+      if (cir.getLineLeft() != null) root.getChildren().add(cir.getLineLeft());
+      if (cir.getLineRight() != null) root.getChildren().add(cir.getLineRight());
+    });
+  }
+
+
+  public void searchTree(Group root, T element) throws InterruptedException {
+    if (tree.search(element) == null) {
+      System.out.println(element.toString() + " not exists!");
+    } else {
+      SearchCircleNode searchCir = new SearchCircleNode();
+      root.getChildren().add(searchCir);
+      for (Object o : getSearchPath(element)) {
+        searchCir.moveTo(((CircleNode) o).getLayoutX(), ((CircleNode) o).getLayoutY());
+        Thread.sleep(3000);
+      }
+    }
+  }
+
+  private ArrayList<CircleNode> getSearchPath(T element) {
+    ArrayList<CircleNode> searchPath = new ArrayList<>();
+
+    for (Object key : tree.path(element)) {
+      searchPath.add(this.treeView.get(key));
+    }
+    return searchPath;
+  }
+
+  public ParallelTransition createAnimationHandleDelete(Group root, HashMap<Node, CircleNode> afterDeleteTreeView){
+
+    ParallelTransition pl = new ParallelTransition();
+
+    this.treeView.forEach((bstKey, bstNode) -> {
+      int check = 0; // if this node have in both tree -> 1; else -> 0 -> delete
+      for (Map.Entry<Node, CircleNode> entry : afterDeleteTreeView.entrySet()) {
+        Node avlKey = entry.getKey();
+        CircleNode avlNode = entry.getValue();
+        if (bstKey.element.compareTo(avlKey.element) == 0) {
+          // this node represent in both tree
+          check = 1;
+          // Find position to moving to in avlTree
+          double moveToX = avlNode.getLayoutX();
+          double moveToY = avlNode.getLayoutY();
+          // Add animation to root
+          pl.getChildren().add(bstNode.createAnimationTranslateTo(moveToX, moveToY));
+        }
+      }
+
+      // If not fine this node in AVL Tree -> remove it from screen
+      if (check == 0) root.getChildren().remove(bstNode);
+    });
+
+    return pl;
+  }
+
+  public ParallelTransition createAnimationHandleInsert(Group root, HashMap<Node, CircleNode> afterInsertTreeView){
+
+    ParallelTransition pl = new ParallelTransition();
+
+    this.treeView.forEach((bstKey, bstNode) -> {
+      afterInsertTreeView.forEach((avlKey, avlNode) -> {
+        if (bstKey.element.compareTo(avlKey.element) == 0) {
+          // Find position to moving to in avlTree
+          double moveToX = avlNode.getLayoutX();
+          double moveToY = avlNode.getLayoutY();
+          // Add animation to root
+          pl.getChildren().add(bstNode.createAnimationTranslateTo(moveToX, moveToY));
+        }
+      });
+    });
+
+    return pl;
   }
 
   // Function return HashMap of changed Node and CircleNode
