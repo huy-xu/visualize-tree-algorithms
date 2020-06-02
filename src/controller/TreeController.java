@@ -1,14 +1,18 @@
 package controller;
 
+import javafx.scene.Group;
+import javafx.scene.shape.Line;
 import model.BST;
 import model.Node;
+import model.RBTree;
 import view.CircleNode;
+import view.RBCircleNode;
 
 import java.util.HashMap;
 
 public class TreeController {
   public HashMap<Node, CircleNode> treeView;
-  private BST tree;
+  public BST tree;
 
   // For test
   private final double CENTER_X = 500;
@@ -24,26 +28,62 @@ public class TreeController {
   private HashMap<Node, CircleNode> createTreeView(BST tree) {
     HashMap<Node, CircleNode> treeView = new HashMap<>();
     if (tree.root != null) {
-      createTreeView(treeView, tree.root, this.CENTER_X, this.CENTER_Y, this.H_GAP);
+      if (tree instanceof RBTree) {
+        createRBTreeView(treeView, tree.root, this.CENTER_X, this.CENTER_Y, this.H_GAP);
+      } else {
+        createTreeView(treeView, tree.root, this.CENTER_X, this.CENTER_Y, this.H_GAP);
+      }
     }
     return treeView;
   }
 
   private void createTreeView(HashMap treeView, Node current, double centerX, double centerY, double hGap) {
+    CircleNode cir = new CircleNode(current.element.toString(), centerX, centerY, hGap);
+
     if (current.left != null) {
+      cir.setLineLeft(new Line(cir.getLayoutX() + 20, cir.getLayoutY() + 20, cir.getLayoutX() - cir.gethGap() + 20, cir.getLayoutY() + 50 + 20));
       createTreeView(treeView, current.left, centerX - hGap, centerY + V_GAP, hGap / 2);
     }
 
     if (current.right != null) {
+      cir.setLineRight(new Line(cir.getLayoutX() + 20, cir.getLayoutY() + 20, cir.getLayoutX() + cir.gethGap() + 20, cir.getLayoutY() + 50 + 20));
       createTreeView(treeView, current.right, centerX + hGap, centerY + V_GAP, hGap / 2);
     }
 
-    CircleNode cir = new CircleNode(current.element.toString(), centerX, centerY);
+    treeView.put(current, cir);
+  }
+
+  private void createRBTreeView(HashMap treeView, Node current, double centerX, double centerY, double hGap) {
+    RBCircleNode cir = new RBCircleNode(current.element.toString(), centerX, centerY, hGap, current.color);
+
+    if (current.left != null) {
+      cir.setLineLeft(new Line(cir.getLayoutX() + 20, cir.getLayoutY() + 20, cir.getLayoutX() - cir.gethGap() + 20, cir.getLayoutY() + 50 + 20));
+      createRBTreeView(treeView, current.left, centerX - hGap, centerY + V_GAP, hGap / 2);
+    }
+
+    if (current.right != null) {
+      cir.setLineRight(new Line(cir.getLayoutX() + 20, cir.getLayoutY() + 20, cir.getLayoutX() + cir.gethGap() + 20, cir.getLayoutY() + 50 + 20));
+      createRBTreeView(treeView, current.right, centerX + hGap, centerY + V_GAP, hGap / 2);
+    }
+
     treeView.put(current, cir);
   }
 
   public void updateTreeView() {
     this.treeView = createTreeView(this.tree);
+  }
+
+  public void displayTree(Group root) {
+    this.treeView.forEach((node, cir) -> {
+      if (cir.getLineLeft() != null) {
+        root.getChildren().add(cir.getLineLeft());
+      }
+      if (cir.getLineRight() != null) {
+        root.getChildren().add(cir.getLineRight());
+      }
+      // Display circleNode
+      root.getChildren().add(cir);
+    });
   }
 
   // Function return HashMap of changed Node and CircleNode
