@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 public class BST<T extends Comparable<T>> implements Tree<T> {
   public Node<T> root = null;
 
@@ -75,7 +77,7 @@ public class BST<T extends Comparable<T>> implements Tree<T> {
     return search(root, element);
   }
 
-  public Node<T> search(Node<T> current, T element) {
+  private Node<T> search(Node<T> current, T element) {
     if (current == null) {
       return null;
     }
@@ -88,6 +90,22 @@ public class BST<T extends Comparable<T>> implements Tree<T> {
       return search(current.left, element);
     }
     return null;
+  }
+
+  public ArrayList<Node<T>> path(T element){
+    ArrayList<Node<T>> list = new ArrayList<>();
+    Node<T> current = root;
+    while(current != null){
+      list.add(current);
+      if(element.compareTo(current.element) < 0) {
+        current = current.left;
+      } else if(element.compareTo(current.element) > 0) {
+        current = current.right;
+      } else {
+        break;
+      }
+    }
+    return list;
   }
 
   @Override

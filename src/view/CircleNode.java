@@ -1,11 +1,13 @@
 package view;
 
+import javafx.animation.TranslateTransition;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
+import javafx.util.Duration;
 
 import static model.Constants.FONT;
 import static model.Constants.RADIUS;
@@ -26,7 +28,7 @@ public class CircleNode extends StackPane implements Comparable{
     text.setBoundsType(TextBoundsType.VISUAL);
 
     Circle cir = new Circle(RADIUS);
-    cir.setFill(Color.TRANSPARENT);
+    cir.setFill(Color.WHITE);
     cir.setStroke(Color.BLUEVIOLET);
     cir.setStrokeWidth(3);
 
@@ -57,6 +59,15 @@ public class CircleNode extends StackPane implements Comparable{
 
   public void setLineRight(Line lineRight) {
     this.lineRight = lineRight;
+  }
+
+  // ANIMATION FOR CIRCLE NODE
+  public TranslateTransition createAnimationTranslateTo(double toX, double toY){
+    TranslateTransition tt = new TranslateTransition(Duration.seconds(3), this);
+    tt.setCycleCount(1);
+    tt.setByX(toX - this.getLayoutX());
+    tt.setByY(toY - this.getLayoutY());
+    return tt;
   }
 
   @Override

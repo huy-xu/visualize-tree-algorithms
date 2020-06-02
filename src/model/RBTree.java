@@ -242,19 +242,4 @@ public class RBTree<T extends Comparable<T>> extends BST<T> {
     else
       grandparent.right = newParent;
   }
-
-  public ArrayList<Node<T>> path(T e){
-    ArrayList<Node<T>> list = new ArrayList<>();
-    Node<T> current = root;
-    while(current != null){
-      list.add(current);
-      if(e.compareTo(current.element) < 0)
-        current = current.left;
-      else if(e.compareTo(current.element) > 0)
-        current = current.right;
-      else
-        break;
-    }
-    return list;
-  }
 }
