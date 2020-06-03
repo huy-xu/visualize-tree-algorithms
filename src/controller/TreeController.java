@@ -9,7 +9,7 @@ import model.BST;
 import model.Node;
 import model.RBTree;
 import view.CircleNode;
-import view.RBCircleNode;
+import view.CircleNode;
 import view.SearchCircleNode;
 
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class TreeController<T extends Comparable<T>> {
   }
 
   private void createRBTreeView(HashMap treeView, Node current, double centerX, double centerY, double hGap) {
-    RBCircleNode cir = new RBCircleNode(current.element.toString(), centerX, centerY, hGap, current.color);
+    CircleNode cir = new CircleNode(current.element.toString(), centerX, centerY, hGap, current.color);
 
     if (current.left != null) {
       cir.setLineLeft(new Line(cir.getLayoutX() + 20, cir.getLayoutY() + 20, cir.getLayoutX() - cir.gethGap() + 20, cir.getLayoutY() + 50 + 20));
