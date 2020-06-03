@@ -1,6 +1,8 @@
 package controller;
 
 import javafx.animation.ParallelTransition;
+import javafx.animation.SequentialTransition;
+import javafx.animation.TranslateTransition;
 import javafx.scene.Group;
 import javafx.scene.shape.Line;
 import model.BST;
@@ -19,9 +21,6 @@ import static model.Constants.*;
 public class TreeController<T extends Comparable<T>> {
   public HashMap<Node, CircleNode> treeView;
   public BST tree;
-
-  // For test
-
 
   public TreeController(BST tree) {
     this.treeView = createTreeView(tree);
@@ -76,7 +75,14 @@ public class TreeController<T extends Comparable<T>> {
     this.treeView = createTreeView(this.tree);
   }
 
-  public void displayTree(Group root) {
+  public void displayCircle(Group root) {
+    this.treeView.forEach((node, cir) -> {
+      root.getChildren().add(cir);
+    });
+
+  }
+
+  public void displayLines(Group root) {
     this.treeView.forEach((node, cir) -> {
       if (cir.getLineLeft() != null) {
         root.getChildren().add(cir.getLineLeft());
@@ -84,30 +90,35 @@ public class TreeController<T extends Comparable<T>> {
       if (cir.getLineRight() != null) {
         root.getChildren().add(cir.getLineRight());
       }
-      // Display circleNode
-      root.getChildren().add(cir);
-    });
-  }
-
-  public void displayLines(Group root ){
-    this.treeView.forEach((node, cir) -> {
-      // Display two lines
-      if (cir.getLineLeft() != null) root.getChildren().add(cir.getLineLeft());
-      if (cir.getLineRight() != null) root.getChildren().add(cir.getLineRight());
     });
   }
 
 
-  public void searchTree(Group root, T element) throws InterruptedException {
-    if (tree.search(element) == null) {
+  public SequentialTransition createAnimationOnSearchTree(Group root, T element) {
+    SequentialTransition sq = new SequentialTransition();
+    if (this.tree.search(element) == null) {
       System.out.println(element.toString() + " not exists!");
+      return null;
     } else {
       SearchCircleNode searchCir = new SearchCircleNode();
-      root.getChildren().add(searchCir);
-      for (Object o : getSearchPath(element)) {
-        searchCir.moveTo(((CircleNode) o).getLayoutX(), ((CircleNode) o).getLayoutY());
-        Thread.sleep(3000);
+      searchCir.setLayoutX(500);
+      searchCir.setLayoutY(50);
+      double lastLayoutX = 500;
+      for (CircleNode o : getSearchPath(element)) {
+        if (o.getLayoutX() == 500) {
+          TranslateTransition tr = searchCir.createAnimationTranslateTo(o.getLayoutX(), o.getLayoutY());
+          sq.getChildren().add(tr);
+        } else if (o.getLayoutX() >= lastLayoutX) {
+          TranslateTransition tr = searchCir.createAnimationTranslateTo(500 + o.gethGap() * 2, 100);
+          sq.getChildren().add(tr);
+        } else {
+          TranslateTransition tr = searchCir.createAnimationTranslateTo(500 - o.gethGap() * 2, 100);
+          sq.getChildren().add(tr);
+        }
+        lastLayoutX = o.getLayoutX();
       }
+      root.getChildren().add(searchCir);
+      return sq;
     }
   }
 
@@ -120,7 +131,7 @@ public class TreeController<T extends Comparable<T>> {
     return searchPath;
   }
 
-  public ParallelTransition createAnimationHandleDelete(Group root, HashMap<Node, CircleNode> afterDeleteTreeView){
+  public ParallelTransition createAnimationHandleDelete(Group root, HashMap<Node, CircleNode> afterDeleteTreeView) {
 
     ParallelTransition pl = new ParallelTransition();
 
@@ -147,7 +158,7 @@ public class TreeController<T extends Comparable<T>> {
     return pl;
   }
 
-  public ParallelTransition createAnimationHandleInsert(Group root, HashMap<Node, CircleNode> afterInsertTreeView){
+  public ParallelTransition createAnimationHandleInsert(Group root, HashMap<Node, CircleNode> afterInsertTreeView) {
 
     ParallelTransition pl = new ParallelTransition();
 
@@ -164,18 +175,5 @@ public class TreeController<T extends Comparable<T>> {
     });
 
     return pl;
-  }
-
-  // Function return HashMap of changed Node and CircleNode
-  public HashMap<Node, CircleNode> getListNodeChanged() {
-    HashMap<Node, CircleNode> list = new HashMap<>();
-    HashMap<Node, CircleNode> newTreeView = createTreeView(this.tree);
-
-    for (Node key : newTreeView.keySet()) {
-      if (newTreeView.get(key).compareTo(this.treeView.get(key)) != 0) {
-        list.put(key, newTreeView.get(key));
-      }
-    }
-    return list;
   }
 }

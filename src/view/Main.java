@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
@@ -60,6 +61,36 @@ public class Main extends Application {
     deleteButton.setMinWidth(50);
     root.getChildren().add(deleteButton); // attach the button to desired node in the scene
 
+    TextField searchText = new TextField();
+    searchText.setPromptText("Search a value...");
+    searchText.setLayoutX(350);
+    searchText.setMinWidth(50);
+    root.getChildren().add(searchText); //attach the text field to the scene.
+
+    Button searchButton = new Button("Search");
+    searchButton.setLayoutX(700);
+    searchButton.setLayoutY(0);
+    searchButton.setMinWidth(50);
+    root.getChildren().add(searchButton);
+
+    /***
+     *  SEARCH: Program run when user input value need to be deleted and click this button
+     */
+    searchButton.setOnAction(event -> {
+      // Get user input value
+      String text = searchText.getText();
+      int userInput = Integer.parseInt(text);
+
+      // Remove the last tree to paint again
+      root.getChildren().removeAll(root.getChildren().filtered(el -> el instanceof Line));
+      root.getChildren().removeAll(root.getChildren().filtered(el -> el instanceof CircleNode));
+
+      treeControllerForAVL.updateTreeView();
+      treeControllerForAVL.displayLines(root);
+      treeControllerForAVL.displayCircle(root);
+      treeControllerForAVL.createAnimationOnSearchTree(root, userInput).play();
+    });
+
     /***
      *  DELETE: Program run when user input value need to be deleted and click this button
      */
@@ -80,20 +111,19 @@ public class Main extends Application {
       treeControllerForAVL.updateTreeView();
       treeControllerForBST.updateTreeView();
 
+      // Clear all lines on the screen
+      root.getChildren().removeAll(root.getChildren().filtered(el -> el instanceof Line));
+      //  Display lines again
+      treeControllerForAVL.displayLines(root);
+
       // Display BST Tree to screen
-      treeControllerForBST.displayTree(root);
+      treeControllerForBST.displayCircle(root);
 
       // Create animation when delete on BST Tree
       ParallelTransition deleteAnima = treeControllerForBST.createAnimationHandleDelete(root, treeControllerForAVL.treeView);
 
       // Play rotate animation
       deleteAnima.play();
-
-      // Clear all lines on the screen
-      root.getChildren().removeAll(root.getChildren().filtered(el -> el instanceof Line));
-
-      //  Display lines again
-      treeControllerForAVL.displayLines(root);
 
       // Reassign the last AVLTree to BSTTree to continue
       treeControllerForBST.tree = treeControllerForAVL.tree.cloneTree();
@@ -120,21 +150,20 @@ public class Main extends Application {
       // Create treeView from treeNode
       treeControllerForAVL.updateTreeView();
       treeControllerForBST.updateTreeView();
+      
+      // Clear all lines on the screen
+      root.getChildren().removeAll(root.getChildren().filtered(el -> el instanceof Line));
+      // Display BST Line to screen
+      treeControllerForAVL.displayLines(root);
 
       // Display BST Tree to screen
-      treeControllerForBST.displayTree(root);
+      treeControllerForBST.displayCircle(root);
 
       // Run rotate animation on BST Tree
       ParallelTransition insertAnima = treeControllerForBST.createAnimationHandleInsert(root, treeControllerForAVL.treeView);
 
       // Play rotate animation
       insertAnima.play();
-
-      // Clear all lines on the screen
-      root.getChildren().removeAll(root.getChildren().filtered(el -> el instanceof Line));
-
-      //  Display lines again
-      treeControllerForAVL.displayLines(root);
 
       // Reassign the last AVLTree to BSTTree to continue
       treeControllerForBST.tree = treeControllerForAVL.tree.cloneTree();

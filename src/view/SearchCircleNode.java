@@ -16,10 +16,4 @@ public class SearchCircleNode extends CircleNode{
     cir.setStroke(Color.ORANGERED);
     cir.setFill(Color.TRANSPARENT);
   }
-
-  public void moveTo(double toX, double toY) {
-    this.createAnimationTranslateTo(toX, toY).play();
-    this.setLayoutX(toX);
-    this.setLayoutY(toY);
-  }
 }

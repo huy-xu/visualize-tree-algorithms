@@ -63,7 +63,7 @@ public class CircleNode extends StackPane implements Comparable{
 
   // ANIMATION FOR CIRCLE NODE
   public TranslateTransition createAnimationTranslateTo(double toX, double toY){
-    TranslateTransition tt = new TranslateTransition(Duration.seconds(3), this);
+    TranslateTransition tt = new TranslateTransition(Duration.seconds(1), this);
     tt.setCycleCount(1);
     tt.setByX(toX - this.getLayoutX());
     tt.setByY(toY - this.getLayoutY());
