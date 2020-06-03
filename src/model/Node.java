@@ -1,6 +1,6 @@
 package model;
 
-import static model.Constants.WHITE;
+import static model.Constants.RED;
 
 public class Node<T extends Comparable<T>> {
   public T element;
@@ -8,7 +8,7 @@ public class Node<T extends Comparable<T>> {
   public Node<T> right;
   public Node<T> parent;
   public int height;
-  public int color;
+  public boolean color;
 
   public Node(T element) {
     this.element = element;
@@ -16,6 +16,6 @@ public class Node<T extends Comparable<T>> {
     right = null;
     parent = null;
     height = 1;
-    color = WHITE;
+    color = RED;
   }
 }

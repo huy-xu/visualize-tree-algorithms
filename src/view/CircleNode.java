@@ -9,13 +9,13 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.util.Duration;
 
-import static model.Constants.*;
+import static model.Constants.FONT;
+import static model.Constants.RADIUS;
 
 public class CircleNode extends StackPane implements Comparable{
   public String value;
   private double hGap;
   private Line lineLeft, lineRight;
-  private int color = WHITE;
 
   public CircleNode(String value, double centerX, double centerY, double hGap) {
     this.value = value;
@@ -31,31 +31,6 @@ public class CircleNode extends StackPane implements Comparable{
     cir.setFill(Color.WHITE);
     cir.setStroke(Color.BLUEVIOLET);
     cir.setStrokeWidth(3);
-
-    this.getChildren().addAll(cir, text);
-    this.setLayoutX(centerX);
-    this.setLayoutY(centerY);
-  }
-
-  public CircleNode(String value, double centerX, double centerY, double hGap, int color) {
-    this.value = value;
-    this.hGap = hGap;
-    this.lineLeft = null;
-    this.lineRight = null;
-
-    Text text = new Text(value);
-    text.setFont(FONT);
-    text.setFill(Color.PALEGREEN);
-    text.setBoundsType(TextBoundsType.VISUAL);
-
-    Circle cir = new Circle(RADIUS);
-    cir.setStroke(Color.BLUEVIOLET);
-    cir.setStrokeWidth(3);
-    if (color == RED) {
-      cir.setFill(Color.RED);
-    } else {
-      cir.setFill(Color.BLACK);
-    }
 
     this.getChildren().addAll(cir, text);
     this.setLayoutX(centerX);

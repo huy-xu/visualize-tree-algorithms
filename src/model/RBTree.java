@@ -9,8 +9,6 @@ public class RBTree<T extends Comparable<T>> extends BST<T> {
   @Override
   public boolean insert(T element) {
     if (super.insert(element)) {
-      Node node = search(element);
-      node.color = RED;
       ensureRBTree(element);
       return true;
     }
