@@ -93,7 +93,6 @@ public class TreeController<T extends Comparable<T>> {
     });
   }
 
-
   public SequentialTransition createAnimationOnSearchTree(Group root, T element) {
     SequentialTransition sq = new SequentialTransition();
     if (this.tree.search(element) == null) {
@@ -175,5 +174,18 @@ public class TreeController<T extends Comparable<T>> {
     });
 
     return pl;
+  }
+
+  public void createTreeViewColor(RBTree rbTree) {
+    HashMap<Node, CircleNode> treeViewColor = new HashMap<>();
+
+    this.treeView.forEach((node, cir) -> {
+      RBCircleNode rbCir = new RBCircleNode(cir.value, cir.getLayoutX(), cir.getLayoutY(), cir.gethGap(), rbTree.search(node.element).color);
+      rbCir.setLineLeft(cir.getLineLeft());
+      rbCir.setLineRight(cir.getLineRight());
+      treeViewColor.put(node, rbCir);
+    });
+
+    this.treeView = treeViewColor;
   }
 }

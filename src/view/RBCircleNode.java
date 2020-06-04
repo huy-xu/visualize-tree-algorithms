@@ -27,4 +27,8 @@ public class RBCircleNode extends CircleNode {
       cir.setFill(Color.RED);
     }
   }
+
+  public boolean getColor() {
+    return this.color;
+  }
 }
