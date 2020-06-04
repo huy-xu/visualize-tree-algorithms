@@ -28,8 +28,8 @@ public class CircleNode extends StackPane implements Comparable{
     text.setBoundsType(TextBoundsType.VISUAL);
 
     Circle cir = new Circle(RADIUS);
-    cir.setFill(Color.WHITE);
-    cir.setStroke(Color.BLUEVIOLET);
+    cir.setFill(Color.BLUE);
+    cir.setStroke(Color.ORANGE);
     cir.setStrokeWidth(3);
 
     this.getChildren().addAll(cir, text);
