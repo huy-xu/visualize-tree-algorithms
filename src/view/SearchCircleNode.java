@@ -13,7 +13,8 @@ public class SearchCircleNode extends CircleNode{
     Iterator rbChild = this.getChildren().iterator();
 
     Circle cir = (Circle) rbChild.next();
-    cir.setStroke(Color.ORANGERED);
+    cir.setStroke(Color.DEEPPINK);
+    cir.setStrokeWidth(4);
     cir.setFill(Color.TRANSPARENT);
   }
 }

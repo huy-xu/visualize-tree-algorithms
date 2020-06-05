@@ -363,12 +363,21 @@ public class Controller implements Initializable {
         }
         printList();
       } catch (NullPointerException e) {
-        Alert alert = new Alert(Alert.AlertType.ERROR, "You must select type of tree before.",
-                ButtonType.OK);
+        if (this.typeTree == null) {
+          Alert alert = new Alert(Alert.AlertType.ERROR, "You must select type of tree before.",
+                  ButtonType.OK);
 
-        alert.showAndWait()
-                .filter(response -> response == ButtonType.OK)
-                .ifPresent(response -> alert.close());
+          alert.showAndWait()
+                  .filter(response -> response == ButtonType.OK)
+                  .ifPresent(response -> alert.close());
+        } else {
+          Alert alert = new Alert(Alert.AlertType.INFORMATION, "Can not find the value.",
+                  ButtonType.OK);
+
+          alert.showAndWait()
+                  .filter(response -> response == ButtonType.OK)
+                  .ifPresent(response -> alert.close());
+        }
       }
     }
   }

@@ -4,6 +4,7 @@ import javafx.animation.ParallelTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.scene.Group;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import model.BST;
 import model.Node;
@@ -85,9 +86,13 @@ public class TreeController<T extends Comparable<T>> {
   public void displayLines(Group root) {
     this.treeView.forEach((node, cir) -> {
       if (cir.getLineLeft() != null) {
+        cir.getLineLeft().setStroke(Color.rgb(49, 116, 222));
+        cir.getLineLeft().setStrokeWidth(3);
         root.getChildren().add(cir.getLineLeft());
       }
       if (cir.getLineRight() != null) {
+        cir.getLineRight().setStroke(Color.rgb(49, 116, 222));
+        cir.getLineRight().setStrokeWidth(3);
         root.getChildren().add(cir.getLineRight());
       }
     });
